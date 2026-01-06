@@ -2,7 +2,7 @@
 
 > **Continue your local AI coding sessions from anywhere**
 
-DevBridge is a modern web-based terminal application that enables you to access and continue your local CLI AI programming sessions (Claude Code, GitHub Copilot CLI, Google Gemini CLI) from any device, anywhere. Built with a beautiful, responsive UI inspired by Claude's warm aesthetic.
+DevBridge is a modern web-based terminal application that enables you to access and continue your local CLI AI programming sessions (Claude Code, Codex CLI, Google Gemini CLI) from any device, anywhere. Built with a beautiful, responsive UI inspired by Claude's warm aesthetic.
 
 [![Python 3.13+](https://img.shields.io/badge/python-3.13+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.128-green.svg)](https://fastapi.tiangolo.com)
@@ -24,7 +24,7 @@ DevBridge is a modern web-based terminal application that enables you to access 
 ### 🚀 **AI CLI Integration**
 - **Project Quick Launch**: Browse your projects and instantly open them with:
   - Claude Code (`claude`)
-  - GitHub Copilot CLI (`codex`)
+  - Codex CLI (`codex`)
   - Google Gemini CLI (`gemini`)
   - Or just a regular terminal
 - **Smart Shell Detection**: Automatically uses PowerShell on Windows, Bash on Unix/Linux
