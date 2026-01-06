@@ -85,23 +85,12 @@ Perfect for developers who work with AI CLI tools (Claude Code, Codex CLI, Googl
 
 ---
 
-## 📸 Screenshots
+## 📸 Screenshot
 
 ### Desktop Interface
 ![Desktop Terminal View](screenshots/desktop-terminal.png)
 *Full-featured terminal interface with multi-session management and quick actions sidebar*
 
-### Mobile Experience
-![Mobile View](screenshots/mobile-view.png)
-*Touch-optimized mobile interface with virtual keyboard and swipe gestures*
-
-### Project Quick Launch
-![Project Browser](screenshots/project-browser.png)
-*Browse your projects and launch them instantly with your favorite AI CLI tool*
-
-### Quick Actions Panel
-![Quick Actions](screenshots/quick-actions.png)
-*One-click execution of common tasks with real-time notifications*
 
 ---
 
