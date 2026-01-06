@@ -165,11 +165,87 @@ function closeModal(modalId) {
 // Terminal Management
 // ============================================
 
+// Persistence: Save/Load open tabs state
+function saveOpenTabsState() {
+  const openTabs = Array.from(state.tabs.keys());
+  const tabsState = {
+    openTabs: openTabs,
+    activeTabId: state.activeTabId
+  };
+  localStorage.setItem('openTabsState', JSON.stringify(tabsState));
+  console.log('Saved open tabs state:', tabsState);
+}
+
+function loadOpenTabsState() {
+  try {
+    const saved = localStorage.getItem('openTabsState');
+    if (!saved) {
+      console.log('No saved tabs state found');
+      return null;
+    }
+
+    const tabsState = JSON.parse(saved);
+    console.log('Loaded tabs state:', tabsState);
+    return tabsState;
+  } catch (err) {
+    console.error('Failed to load tabs state:', err);
+    return null;
+  }
+}
+
+async function restoreOpenTabs() {
+  const tabsState = loadOpenTabsState();
+  if (!tabsState || !tabsState.openTabs || tabsState.openTabs.length === 0) {
+    console.log('No tabs to restore');
+    return;
+  }
+
+  // Wait for sessions to be loaded
+  if (state.sessions.length === 0) {
+    console.log('No sessions available to restore');
+    return;
+  }
+
+  // Get list of available session IDs
+  const availableSessionIds = state.sessions.map(s => s.id);
+
+  // Filter tabs to only those that still exist on backend
+  const tabsToRestore = tabsState.openTabs.filter(sessionId =>
+    availableSessionIds.includes(sessionId)
+  );
+
+  if (tabsToRestore.length === 0) {
+    console.log('No valid sessions to restore');
+    return;
+  }
+
+  console.log(`Restoring ${tabsToRestore.length} terminal(s)...`);
+
+  // Open each tab sequentially
+  for (const sessionId of tabsToRestore) {
+    try {
+      await openTerminalTab(sessionId, null, false); // Don't save state while restoring
+    } catch (err) {
+      console.error(`Failed to restore tab ${sessionId}:`, err);
+    }
+  }
+
+  // Restore active tab
+  if (tabsState.activeTabId && state.tabs.has(tabsState.activeTabId)) {
+    switchToTab(tabsState.activeTabId, false); // Don't save state while restoring
+  } else if (tabsToRestore.length > 0) {
+    // If saved active tab doesn't exist, activate first restored tab
+    switchToTab(tabsToRestore[0], false);
+  }
+
+  console.log('Tabs restored successfully');
+}
+
 function createTerminalInstance(sessionId) {
   const term = new Terminal({
     cursorBlink: true,
     convertEol: true,
-    fontSize: window.innerWidth <= 768 ? 16 : 14,
+    fontSize: window.innerWidth <= 768 ? 10 : 14,
     fontFamily: "'JetBrains Mono', 'Consolas', monospace",
     theme: {
       background: '#000000',
@@ -264,9 +340,9 @@ function sendResize(ws, term) {
   }
 }
 
-async function openTerminalTab(sessionId, autoCommand = null) {
+async function openTerminalTab(sessionId, autoCommand = null, shouldSaveState = true) {
   if (state.tabs.has(sessionId)) {
-    switchToTab(sessionId);
+    switchToTab(sessionId, shouldSaveState);
     return;
   }
 
@@ -285,7 +361,12 @@ async function openTerminalTab(sessionId, autoCommand = null) {
   });
 
   createTabUI(sessionId, sessionData);
-  switchToTab(sessionId);
+  switchToTab(sessionId, shouldSaveState);
+
+  // Save state after opening tab
+  if (shouldSaveState) {
+    saveOpenTabsState();
+  }
 
   setTimeout(() => {
     fitAddon.fit();
@@ -335,7 +416,7 @@ function createTabUI(sessionId, sessionData) {
   $('tabsScroll').appendChild(tab);
 }
 
-function switchToTab(sessionId) {
+function switchToTab(sessionId, shouldSaveState = true) {
   if (!state.tabs.has(sessionId)) return;
 
   state.activeTabId = sessionId;
@@ -356,6 +437,11 @@ function switchToTab(sessionId) {
       tabData.fitAddon.fit();
       tabData.term.focus();
     }, 50);
+  }
+
+  // Save state after switching tabs
+  if (shouldSaveState) {
+    saveOpenTabsState();
   }
 }
 
@@ -390,6 +476,9 @@ async function closeTab(sessionId, killSession = false) {
       showTabPlaceholder();
     }
   }
+
+  // Save state after closing tab
+  saveOpenTabsState();
 
   if (killSession) {
     try {
@@ -1178,8 +1267,14 @@ function setupVirtualKeyboard() {
         case 'Tab':
           keyData = '\t';
           break;
+        case 'Shift+Tab':
+          keyData = '\x1b[Z';
+          break;
         case 'Escape':
           keyData = '\x1b';
+          break;
+        case 'Alt+M':
+          keyData = '\x1bm';
           break;
         case 'Control':
           // TODO: Implement Ctrl modifier
@@ -1489,6 +1584,10 @@ async function init() {
   await loadSettings();
   await refreshSessions();
 
+  // Restore previously open tabs
+  await restoreOpenTabs();
+
+  // If no tabs were restored, show placeholder
   if (state.tabs.size === 0) {
     showTabPlaceholder();
   }
