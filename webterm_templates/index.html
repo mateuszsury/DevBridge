@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#0A0908">
+
+  <title>DevBridge - AI Terminal Launcher</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Xterm CSS -->
+  <link rel="stylesheet" href="/static/xterm.css">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/static/styles.css">
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="/static/manifest.json">
+</head>
+<body>
+
+  <!-- App Container -->
+  <div class="app" id="app">
+
+    <!-- Sidebar Overlay (Mobile) -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Desktop Sidebar -->
+    <aside class="desktop-sidebar" id="desktopSidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 17l6-6-6-6M12 19h8"/>
+          </svg>
+          <span class="logo-text">DevBridge</span>
+        </div>
+        <button class="btn-icon desktop-only" id="toggleSidebarBtn" aria-label="Toggle sidebar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M15 18l-6-6 6-6"/>
+          </svg>
+        </button>
+        <button class="btn-icon mobile-only" id="closeSidebarBtn" aria-label="Close sidebar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="nav-item active" data-view="terminals">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <path d="M7 7l5 5-5 5M13 17h5"/>
+          </svg>
+          <span>Terminals</span>
+        </button>
+        <button class="nav-item" data-view="projects">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/>
+          </svg>
+          <span>Projects</span>
+        </button>
+        <button class="nav-item" data-view="settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M12 1v6m0 6v6M5.64 5.64l4.24 4.24m4.24 4.24l4.24 4.24M1 12h6m6 0h6M5.64 18.36l4.24-4.24m4.24-4.24l4.24-4.24"/>
+          </svg>
+          <span>Settings</span>
+        </button>
+      </nav>
+
+      <!-- Quick Actions Section -->
+      <div class="sidebar-quick-actions">
+        <button class="quick-actions-header" id="quickActionsToggle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+          </svg>
+          <span>Quick Actions</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 9l6 6 6-6"/>
+          </svg>
+        </button>
+        <div class="quick-actions-list" id="sidebarQuickActionsList">
+          <div class="quick-actions-empty">
+            <p>No actions yet</p>
+          </div>
+        </div>
+        <button class="btn-sm btn-primary" id="addQuickActionSidebarBtn" style="width: 100%; margin-top: 8px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          Add Action
+        </button>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="user-badge" id="userBadge">
+          <div class="user-avatar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z"/>
+            </svg>
+          </div>
+          <div class="user-info">
+            <div class="user-name" id="userName">Loading...</div>
+            <div class="user-status">Active</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+      <!-- Top Bar (Desktop) -->
+      <header class="top-bar">
+        <div class="top-bar-left">
+          <button class="btn-icon mobile-only" id="mobileMenuBtn" aria-label="Menu">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="3" y1="12" x2="21" y2="12"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+          </button>
+          <button class="btn-icon desktop-only" id="desktopMenuBtn" aria-label="Toggle sidebar" style="display: none;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="3" y1="12" x2="21" y2="12"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+          </button>
+          <h1 class="view-title" id="viewTitle">Terminals</h1>
+        </div>
+        <div class="top-bar-actions">
+          <button class="btn-sm btn-primary desktop-only" id="newTerminalBtn" style="margin-right: 8px;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="5" x2="12" y2="19"/>
+              <line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            <span>New Terminal</span>
+          </button>
+          <button class="btn-icon" id="commandPaletteBtn" aria-label="Command palette (Ctrl+K)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="M21 21l-4.35-4.35"/>
+            </svg>
+          </button>
+          <button class="btn-icon" id="refreshBtn" aria-label="Refresh">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0118.8-4.3M22 12.5a10 10 0 01-18.8 4.2"/>
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Views Container -->
+      <div class="views-container">
+
+        <!-- Terminals View -->
+        <div class="view active" id="terminalsView">
+
+          <!-- Sessions List (Mobile Drawer) -->
+          <div class="sessions-drawer" id="sessionsDrawer">
+            <div class="drawer-handle"></div>
+            <div class="drawer-header">
+              <h2>Active Sessions</h2>
+              <button class="btn-sm btn-primary" id="newSessionBtnDrawer">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="12" y1="5" x2="12" y2="19"/>
+                  <line x1="5" y1="12" x2="19" y2="12"/>
+                </svg>
+                New
+              </button>
+            </div>
+            <div class="sessions-list" id="sessionsList">
+              <!-- Sessions rendered here -->
+            </div>
+          </div>
+
+          <!-- Terminal Area -->
+          <div class="terminal-container">
+
+            <!-- Tabs Bar -->
+            <div class="tabs-bar" id="tabsBar">
+              <div class="tabs-scroll" id="tabsScroll">
+                <!-- Tabs rendered here by JavaScript -->
+              </div>
+            </div>
+
+            <!-- Virtual Keyboard (Mobile) -->
+            <div class="virtual-keyboard" id="virtualKeyboard">
+              <button class="vk-key" data-key="Tab">Tab</button>
+              <button class="vk-key" data-key="Escape">Esc</button>
+              <button class="vk-key" data-key="Control">Ctrl</button>
+              <button class="vk-key" data-key="ArrowUp">↑</button>
+              <button class="vk-key" data-key="ArrowDown">↓</button>
+              <button class="vk-key" data-key="ArrowLeft">←</button>
+              <button class="vk-key" data-key="ArrowRight">→</button>
+            </div>
+
+            <!-- Terminal Panels -->
+            <div class="terminal-panels" id="terminalPanels">
+              <!-- Terminal instances rendered here -->
+            </div>
+
+          </div> <!-- End terminal-container -->
+
+        </div> <!-- End terminalsView -->
+
+        <!-- Projects View -->
+        <div class="view" id="projectsView">
+
+          <div class="projects-header">
+            <div class="projects-path">
+              <label for="projectsPathInput">Projects Directory</label>
+              <div class="input-with-btn">
+                <input
+                  type="text"
+                  id="projectsPathInput"
+                  class="input"
+                  placeholder="e.g., C:\Users\Projects or ~/code"
+                >
+                <button class="btn-primary" id="loadProjectsBtn">Load</button>
+              </div>
+            </div>
+            <div class="projects-toolbar">
+              <div class="search-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"/>
+                  <path d="M21 21l-4.35-4.35"/>
+                </svg>
+                <input
+                  type="text"
+                  id="projectsSearch"
+                  class="search-input"
+                  placeholder="Search projects..."
+                >
+              </div>
+              <select id="projectsFilter" class="select">
+                <option value="all">All Projects</option>
+                <option value="favorites">Favorites</option>
+                <option value="recent">Recent</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="projects-grid" id="projectsGrid">
+            <!-- Projects rendered here -->
+            <div class="projects-empty">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/>
+              </svg>
+              <p>No projects directory configured</p>
+              <p class="hint">Set your projects path above to get started</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Settings View -->
+        <div class="view" id="settingsView">
+
+          <div class="settings-container">
+
+            <section class="settings-section">
+              <h2>Authentication</h2>
+              <div class="setting-item">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="authRequired">
+                  <span>Require authentication</span>
+                </label>
+              </div>
+              <div class="setting-item">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="allowAnonymousTerminal">
+                  <span>Allow anonymous terminals</span>
+                </label>
+              </div>
+            </section>
+
+            <section class="settings-section">
+              <h2>Session Limits</h2>
+              <div class="setting-item">
+                <label for="maxSessions">Max concurrent sessions</label>
+                <input type="number" id="maxSessions" class="input" min="1" max="100">
+              </div>
+              <div class="setting-item">
+                <label for="idleTtl">Idle timeout (seconds, 0=off)</label>
+                <input type="number" id="idleTtl" class="input" min="0">
+              </div>
+              <div class="setting-item">
+                <label for="scrollbackLimit">Scrollback buffer (characters)</label>
+                <input type="number" id="scrollbackLimit" class="input" min="1000">
+              </div>
+            </section>
+
+            <section class="settings-section">
+              <h2>Default Shells</h2>
+              <div class="setting-item">
+                <label for="defaultUnixShell">Unix/Linux shell</label>
+                <input type="text" id="defaultUnixShell" class="input" placeholder="/bin/bash">
+              </div>
+              <div class="setting-item">
+                <label for="defaultWindowsShell">Windows shell</label>
+                <input type="text" id="defaultWindowsShell" class="input" placeholder="powershell.exe">
+              </div>
+            </section>
+
+            <section class="settings-section">
+              <h2>AI CLI Commands</h2>
+              <div class="setting-item">
+                <label for="claudeCommand">Claude Code command</label>
+                <input type="text" id="claudeCommand" class="input" value="claude" placeholder="claude">
+              </div>
+              <div class="setting-item">
+                <label for="codexCommand">Codex command</label>
+                <input type="text" id="codexCommand" class="input" value="codex" placeholder="codex">
+              </div>
+              <div class="setting-item">
+                <label for="geminiCommand">Gemini CLI command</label>
+                <input type="text" id="geminiCommand" class="input" value="gemini" placeholder="gemini">
+              </div>
+            </section>
+
+            <section class="settings-section">
+              <div class="section-header">
+                <h2>User Management</h2>
+                <button class="btn-sm btn-ghost" id="refreshUsersBtn">Refresh</button>
+              </div>
+
+              <div class="create-user-form">
+                <input type="text" id="newUsername" class="input" placeholder="Username">
+                <input type="password" id="newPassword" class="input" placeholder="Password">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="newIsAdmin">
+                  <span>Admin</span>
+                </label>
+                <button class="btn-primary" id="createUserBtn">Create User</button>
+              </div>
+
+              <div class="users-list" id="usersList">
+                <!-- Users rendered here -->
+              </div>
+            </section>
+
+            <div class="settings-actions">
+              <button class="btn-primary btn-lg" id="saveSettingsBtn">Save All Settings</button>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </main>
+
+    <!-- Mobile Bottom Navigation -->
+    <nav class="bottom-nav mobile-only">
+      <button class="bottom-nav-item active" data-view="terminals">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="18" height="18" rx="2"/>
+          <path d="M7 7l5 5-5 5"/>
+        </svg>
+        <span>Terminals</span>
+      </button>
+      <button class="bottom-nav-item" data-view="projects">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/>
+        </svg>
+        <span>Projects</span>
+      </button>
+      <button class="bottom-nav-item" data-view="settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"/>
+        </svg>
+        <span>Settings</span>
+      </button>
+    </nav>
+
+    <!-- Floating Action Button (Mobile) -->
+    <button class="fab" id="fabBtn" aria-label="New terminal">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="12" y1="5" x2="12" y2="19"/>
+        <line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+    </button>
+
+  </div>
+
+  <!-- Command Palette Modal -->
+  <div class="modal" id="commandPalette">
+    <div class="modal-overlay" id="commandPaletteOverlay"></div>
+    <div class="command-palette-content">
+      <div class="command-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="M21 21l-4.35-4.35"/>
+        </svg>
+        <input
+          type="text"
+          id="commandPaletteInput"
+          placeholder="Type a command or search..."
+          autocomplete="off"
+        >
+      </div>
+      <div class="command-results" id="commandResults">
+        <!-- Commands rendered here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- New Session Modal -->
+  <div class="modal" id="newSessionModal">
+    <div class="modal-overlay" id="newSessionModalOverlay"></div>
+    <div class="modal-content modal-sm">
+      <div class="modal-header">
+        <h2>New Terminal Session</h2>
+        <button class="btn-icon" id="closeNewSessionBtn" aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="newSessionCwd">Working Directory (optional)</label>
+          <input type="text" id="newSessionCwd" class="input" placeholder="Leave empty for home directory">
+        </div>
+        <div class="form-group">
+          <label for="newSessionShell">Shell (optional)</label>
+          <input type="text" id="newSessionShell" class="input" placeholder="Leave empty for default shell">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" id="cancelNewSessionBtn">Cancel</button>
+        <button class="btn-primary" id="createNewSessionBtn">Create Terminal</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notifications Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Quick Action Modal -->
+  <div class="modal" id="quickActionModal">
+    <div class="modal-overlay" id="quickActionModalOverlay"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="quickActionModalTitle">Add Quick Action</h2>
+        <button class="btn-icon" id="closeQuickActionBtn" aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="quickActionName">Action Name</label>
+          <input type="text" id="quickActionName" class="input" placeholder="e.g., Restart Docker">
+        </div>
+        <div class="form-group">
+          <label for="quickActionCommand">Command</label>
+          <input type="text" id="quickActionCommand" class="input" placeholder="e.g., docker compose restart">
+        </div>
+        <div class="form-group">
+          <label for="quickActionCwd">Working Directory</label>
+          <input type="text" id="quickActionCwd" class="input" placeholder="e.g., C:\projects\my-app">
+        </div>
+        <div class="form-group">
+          <label for="quickActionIcon">Icon (emoji)</label>
+          <input type="text" id="quickActionIcon" class="input" placeholder="e.g., 🐳" maxlength="2">
+        </div>
+        <div class="form-group">
+          <label for="quickActionColor">Color</label>
+          <select id="quickActionColor" class="select">
+            <option value="primary">Orange (Primary)</option>
+            <option value="success">Green (Success)</option>
+            <option value="warning">Yellow (Warning)</option>
+            <option value="danger">Red (Danger)</option>
+            <option value="info">Blue (Info)</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" id="cancelQuickActionBtn">Cancel</button>
+        <button class="btn-primary" id="saveQuickActionBtn">Save Action</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="/static/xterm.js"></script>
+  <script src="/static/xterm-addon-fit.js"></script>
+  <script src="/static/app.js"></script>
+
+  <!-- Service Worker for PWA -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/static/sw.js')
+          .then(reg => console.log('Service Worker registered'))
+          .catch(err => console.log('Service Worker registration failed:', err));
+      });
+    }
+  </script>
+
+</body>
+</html>

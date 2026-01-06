@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>WebTerm – Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="min-h-screen bg-slate-950 text-slate-100">
+    <div class="mx-auto flex min-h-screen max-w-md items-center px-6">
+      <div class="w-full rounded-2xl border border-slate-800 bg-slate-900/40 p-6 shadow-2xl">
+        <div class="mb-6">
+          <h1 class="text-2xl font-semibold">WebTerm</h1>
+          <p class="mt-1 text-sm text-slate-300">
+            Zaloguj się (jeśli logowanie jest włączone w ustawieniach).
+          </p>
+          <p class="mt-2 text-xs text-slate-400">
+            Domyślny admin jest tworzony automatycznie, jeśli brak kont.
+          </p>
+        </div>
+
+        <form method="post" action="/login" class="space-y-4">
+          <div>
+            <label class="text-sm text-slate-300">Username</label>
+            <input
+              name="username"
+              class="mt-1 w-full rounded-xl border border-slate-700 bg-slate-950/40 px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-500"
+              placeholder="admin"
+            />
+          </div>
+          <div>
+            <label class="text-sm text-slate-300">Password</label>
+            <input
+              type="password"
+              name="password"
+              class="mt-1 w-full rounded-xl border border-slate-700 bg-slate-950/40 px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+
+          <button
+            type="submit"
+            class="w-full rounded-xl bg-indigo-600 px-3 py-2 font-medium hover:bg-indigo-500"
+          >
+            Login
+          </button>
+        </form>
+
+        <div class="mt-6 text-xs text-slate-400">
+          Jeśli logowanie jest wyłączone, przejdź do <a class="underline" href="/">aplikacji</a>.
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
