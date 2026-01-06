@@ -1,8 +1,17 @@
 # DevBridge 🌉
 
-> **Continue your local AI coding sessions from anywhere**
+> **Your Terminal Sessions, Everywhere**
 
-DevBridge is a modern web-based terminal application that enables you to access and continue your local CLI AI programming sessions (Claude Code, Codex CLI, Google Gemini CLI) from any device, anywhere. Built with a beautiful, responsive UI inspired by Claude's warm aesthetic.
+DevBridge is a professional web-based terminal application that enables seamless session continuity across all your devices. Start a coding session on your desktop, continue it from your laptop at the office, and finish it from your tablet at home—all without losing context or interrupting your workflow.
+
+Perfect for developers who work with AI CLI tools (Claude Code, Codex CLI, Google Gemini CLI) or need access to their development environment from anywhere. DevBridge maintains persistent terminal sessions that survive browser refreshes, device switches, and network interruptions, ensuring your work is always accessible when you need it.
+
+**Key Benefits:**
+- 🔄 **Session Continuity**: Start work on one device, seamlessly continue on another
+- 🌍 **Remote Access**: Access your home/office development environment from anywhere in the world
+- 💾 **Persistent Sessions**: Terminal sessions survive server restarts and browser closures
+- 📱 **Multi-Platform**: Full-featured interface on desktop, tablet, and mobile devices
+- 🚀 **Zero Setup**: No client installation required—just open your browser and continue working
 
 [![Python 3.13+](https://img.shields.io/badge/python-3.13+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.128-green.svg)](https://fastapi.tiangolo.com)
@@ -73,6 +82,26 @@ DevBridge is a modern web-based terminal application that enables you to access 
 - Scrollback buffer size
 - Default shell configuration (Windows/Unix)
 - Custom AI CLI command names
+
+---
+
+## 📸 Screenshots
+
+### Desktop Interface
+![Desktop Terminal View](screenshots/desktop-terminal.png)
+*Full-featured terminal interface with multi-session management and quick actions sidebar*
+
+### Mobile Experience
+![Mobile View](screenshots/mobile-view.png)
+*Touch-optimized mobile interface with virtual keyboard and swipe gestures*
+
+### Project Quick Launch
+![Project Browser](screenshots/project-browser.png)
+*Browse your projects and launch them instantly with your favorite AI CLI tool*
+
+### Quick Actions Panel
+![Quick Actions](screenshots/quick-actions.png)
+*One-click execution of common tasks with real-time notifications*
 
 ---
 
@@ -442,48 +471,6 @@ DevBridge can be installed as a native app on mobile devices:
 - App icon on home screen/dock
 - Offline-capable (UI assets cached)
 - Faster load times
-
----
-
-## 🎨 Customization
-
-### Changing Color Scheme
-
-Edit `webterm/static/styles.css`:
-
-```css
-:root {
-  /* Change primary color from Claude orange to your brand */
-  --color-primary: #FF9B4E;        /* Your primary color */
-  --color-primary-dark: #F97316;   /* Darker shade */
-  --color-primary-darker: #EA580C; /* Even darker */
-
-  /* Background colors */
-  --color-bg-primary: #0A0908;     /* Main background */
-  --color-bg-secondary: #1C1917;   /* Sidebar background */
-
-  /* Text colors */
-  --color-text-primary: #FAFAF9;   /* Main text */
-  --color-text-secondary: #E7E5E4; /* Secondary text */
-}
-```
-
-### Adding Custom Fonts
-
-Update `index.html`:
-
-```html
-<link href="https://fonts.googleapis.com/css2?family=Your+Font:wght@400;600&display=swap" rel="stylesheet">
-```
-
-Update CSS:
-
-```css
-:root {
-  --font-display: 'Your Font', sans-serif;
-  --font-mono: 'Your Mono Font', monospace;
-}
-```
 
 ---
 
