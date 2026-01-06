@@ -1,0 +1,49 @@
+{
+  "name": "DevBridge - AI Terminal Launcher",
+  "short_name": "DevBridge",
+  "description": "Continue your local AI coding sessions from anywhere. Access Claude Code, Copilot CLI, and Gemini CLI from any device.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0A0908",
+  "theme_color": "#FF9B4E",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/static/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/static/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["developer tools", "utilities"],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "New Terminal",
+      "short_name": "Terminal",
+      "description": "Open a new terminal session",
+      "url": "/?action=new-terminal",
+      "icons": []
+    },
+    {
+      "name": "Projects",
+      "short_name": "Projects",
+      "description": "Browse projects",
+      "url": "/?view=projects",
+      "icons": []
+    },
+    {
+      "name": "Quick Actions",
+      "short_name": "Actions",
+      "description": "View quick actions",
+      "url": "/?view=quickActions",
+      "icons": []
+    }
+  ]
+}
