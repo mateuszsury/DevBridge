@@ -1289,6 +1289,14 @@ body {
   /* Show virtual keyboard */
   .virtual-keyboard {
     display: flex;
+    padding: var(--space-xs);
+  }
+
+  /* Virtual keyboard keys - smaller on mobile */
+  .vk-key {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: 11px;
+    min-height: 36px;
   }
 
   /* Adjust main content */
@@ -1311,8 +1319,28 @@ body {
 
   /* Tabs adjustments */
   .tab {
-    min-width: 140px;
-    max-width: 180px;
+    min-width: 120px;
+    max-width: 160px;
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+
+  .tabs-bar {
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .tabs-scroll {
+    min-height: 40px;
+  }
+
+  /* Top bar smaller on mobile */
+  .top-bar {
+    padding: var(--space-md);
+    min-height: 56px;
+  }
+
+  .view-title {
+    font-size: 18px;
   }
 }
 
@@ -1369,10 +1397,15 @@ body {
   background: #000;
 }
 
-/* Mobile terminal font size */
+/* Mobile terminal optimizations */
 @media (max-width: 768px) {
   .xterm {
-    font-size: 16px !important;
+    font-size: 10px !important;
+    padding: var(--space-sm) !important;
+  }
+
+  .terminal-container-inner {
+    border-radius: 0;
   }
 }
 
