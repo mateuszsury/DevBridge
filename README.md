@@ -1,6 +1,12 @@
-# DevBridge 🌉
+<p align="center">
+  <img src="assets/logo.png" alt="DevBridge Logo" width="128" height="128">
+</p>
 
-> **Your Terminal Sessions, Everywhere**
+<h1 align="center">DevBridge</h1>
+
+<p align="center">
+  <strong>Your Terminal Sessions, Everywhere</strong>
+</p>
 
 DevBridge is a professional web-based terminal application that enables seamless session continuity across all your devices. Start a coding session on your desktop, continue it from your laptop at the office, and finish it from your tablet at home—all without losing context or interrupting your workflow.
 
