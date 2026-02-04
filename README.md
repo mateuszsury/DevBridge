@@ -16,7 +16,8 @@ Perfect for developers who work with AI CLI tools (Claude Code, Codex CLI, Googl
 [![Python 3.13+](https://img.shields.io/badge/python-3.13+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.128-green.svg)](https://fastapi.tiangolo.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Author](https://img.shields.io/badge/Author-Mateusz%20Sury-orange.svg)](https://github.com/yourusername)
+[![Author](https://img.shields.io/badge/Author-Mateusz%20Sury-orange.svg)](https://github.com/mateuszsury)
+[![Security](https://img.shields.io/badge/Security-Policy-red.svg)](SECURITY.md)
 
 ---
 
@@ -165,7 +166,7 @@ Perfect for developers who work with AI CLI tools (Claude Code, Codex CLI, Googl
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/devbridge.git
+   git clone https://github.com/mateuszsury/devbridge.git
    cd devbridge
    ```
 
