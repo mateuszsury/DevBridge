@@ -17,7 +17,13 @@ def main():
     head = os.environ.get('HEAD_SHA') or 'HEAD'
     base = os.environ.get('BASE_SHA', '')
     # A new branch has no 'before' revision; its PR validates the complete range.
-    commits = git('rev-list', base + '..' + head).splitlines() if base and set(base) != {'0'} else [git('rev-parse', head)]
+    if base and set(base) != {'0'}:
+        known = subprocess.run(['git', 'cat-file', '-e', base + '^{commit}'], capture_output=True).returncode == 0
+        # After an intentional history migration, old revisions need not be in
+        # a fresh checkout. Validate the replacement history rather than fail.
+        commits = git('rev-list', base + '..' + head if known else head).splitlines()
+    else:
+        commits = [git('rev-parse', head)]
     failures = []
     for sha in commits:
         name, email, message = git('show', '-s', '--format=%an%x00%ae%x00%B', sha).split('\0', 2)
