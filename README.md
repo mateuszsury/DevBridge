@@ -10,12 +10,12 @@
 
 DevBridge is a professional web-based terminal application that enables seamless session continuity across all your devices. Start a coding session on your desktop, continue it from your laptop at the office, and finish it from your tablet at home—all without losing context or interrupting your workflow.
 
-Perfect for developers who work with AI CLI tools (Claude Code, Codex CLI, Google Gemini CLI) or need access to their development environment from anywhere. DevBridge maintains persistent terminal sessions that survive browser refreshes, device switches, and network interruptions, ensuring your work is always accessible when you need it.
+Perfect for developers who work with AI CLI tools (Claude Code, Codex CLI, Google Gemini CLI) or need access to their development environment from anywhere. DevBridge maintains persistent terminal sessions that survive browser refreshes, device switches, and network interruptions, while the server process remains running. A server restart preserves recorded history but does not resume the shell process.
 
 **Key Benefits:**
 - 🔄 **Session Continuity**: Start work on one device, seamlessly continue on another
 - 🌍 **Remote Access**: Access your home/office development environment from anywhere in the world
-- 💾 **Persistent Sessions**: Terminal sessions survive server restarts and browser closures
+- 💾 **Persistent History**: Session metadata and scrollback survive server restarts; running terminals survive browser refreshes and device switches while the server stays running
 - 📱 **Multi-Platform**: Full-featured interface on desktop, tablet, and mobile devices
 - 🚀 **Zero Setup**: No client installation required—just open your browser and continue working
 
@@ -33,7 +33,7 @@ Perfect for developers who work with AI CLI tools (Claude Code, Codex CLI, Googl
 - Create, manage, and switch between multiple terminal sessions
 - Full xterm.js-powered terminal emulation with proper PTY support
 - Session persistence - terminals survive page reloads
-- Automatic session restoration on server restart (marked as "stale")
+- Historical session metadata is restored as "stale" after a server restart; shell processes are not resumed
 - Real-time terminal output via WebSockets
 - Proper terminal resizing and window management
 
