@@ -30,8 +30,8 @@ def main():
         owned = email in OWN_EMAILS or email.lower() == 'noreply@anthropic.com'
         if owned and (name != CANONICAL_NAME or email != CANONICAL_EMAIL):
             failures.append(sha[:12] + ': use the configured maintainer Git identity')
-        if re.search(r'^Co-authored-by:.*noreply@anthropic\.com', message, re.I | re.M):
-            failures.append(sha[:12] + ': remove AI co-author attribution from maintainer-owned changes')
+        if owned and re.search(r'^(?:Co-authored-by:.*noreply@anthropic\.com|Claude-Session:)', message, re.I | re.M):
+            failures.append(sha[:12] + ': remove AI attribution from maintainer-owned changes')
     if failures:
         raise SystemExit('\n'.join(failures))
     print(f'Author policy: {len(commits)} new commit(s) checked; real contributors preserved')
