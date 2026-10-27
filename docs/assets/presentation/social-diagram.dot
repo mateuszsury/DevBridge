@@ -1,0 +1,12 @@
+digraph overview {
+  graph [rankdir=LR, bgcolor="#0b1220", pad="0.45", nodesep="0.35", ranksep="0.40", fontname="DejaVu Sans"];
+  node [shape=box, style="rounded,filled", fillcolor="#172b40", color="#46647e", fontcolor="#eef6ff", fontname="DejaVu Sans", fontsize=18, margin="0.24,0.20", penwidth=1.2];
+  edge [color="#38bdf8", penwidth=1.8, arrowsize=0.75];
+  n0 [label="Browser workspace"];
+  n1 [label="Session manager"];
+  n2 [label="Terminal processes"];
+  n3 [label="SQLite session history"];
+  n0 -> n1;
+  n1 -> n2;
+  n2 -> n3;
+}

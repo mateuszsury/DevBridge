@@ -27,6 +27,14 @@ Perfect for developers who work with AI CLI tools (Claude Code, Codex CLI, Googl
 
 ---
 
+## Project overview
+
+A Python web workspace for persistent terminal sessions, projects and development tools.
+
+![DevBridge — Session overview. Persisted history after a restart is not a surviving live shell.](docs/assets/presentation/overview.svg)
+
+Session overview. Persisted history after a restart is not a surviving live shell.
+
 ## ✨ Features
 
 ### 🖥️ **Multi-Terminal Management**
